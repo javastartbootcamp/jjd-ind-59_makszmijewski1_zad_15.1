@@ -7,7 +7,7 @@ import pl.javastart.task.comparators.ResultComparator;
 import java.util.*;
 
 public class TournamentStats {
-    List<Player> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
     private static final String EXIT_PROGRAM = "STOP";
     private static final int FIRSTNAME_COMPARE_OPTION = 1;
     private static final int LASTNAME_COMPARE_OPTION = 2;
