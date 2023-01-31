@@ -17,13 +17,13 @@ public class TournamentStats {
 
     void run(Scanner scanner) {
         loadAndSavePlayers(scanner);
-        Comparator<Player> comparator = chooseComperator(scanner);
+        Comparator<Player> comparator = chooseComparator(scanner);
         players.sort(comparator);
         FileWriter fileWriter = new FileWriter();
         fileWriter.saveToFileStats(players);
     }
 
-    private Comparator<Player> chooseComperator(Scanner scanner) {
+    private Comparator<Player> chooseComparator(Scanner scanner) {
         boolean exit = false;
         Comparator<Player> comparator = null;
         while (!exit) {
@@ -52,13 +52,13 @@ public class TournamentStats {
     }
 
     private void loadAndSavePlayers(Scanner scanner) {
-        boolean exit = true;
+        boolean exit = false;
         String playerAsString = "";
-        while (exit) {
+        while (!exit) {
             System.out.println("Podaj wynik kolejnego gracza (lub stop):");
             playerAsString = scanner.nextLine();
             if (playerAsString.equals(EXIT_PROGRAM)) {
-                exit = false;
+                exit = true;
             } else {
                 Player player = createPlayer(playerAsString);
                 players.add(player);
