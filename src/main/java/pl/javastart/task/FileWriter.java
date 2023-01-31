@@ -2,11 +2,12 @@ package pl.javastart.task;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.List;
 
 public class FileWriter {
-    public void saveToFileStats(TournamentStats tournamentStats) {
+    public void saveToFileStats(List<Player> players) {
         try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter("stats.csv"))) {
-            for (Player player : tournamentStats.getPlayers()) {
+            for (Player player : players) {
                 String playerAsString = playerAsString(player);
                 writer.write(playerAsString + "\n");
             }

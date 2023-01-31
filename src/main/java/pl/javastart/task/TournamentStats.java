@@ -4,10 +4,7 @@ import pl.javastart.task.comparators.FirstNameComparator;
 import pl.javastart.task.comparators.LastNameComparator;
 import pl.javastart.task.comparators.ResultComparator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class TournamentStats {
     List<Player> players = new ArrayList<>();
@@ -18,49 +15,39 @@ public class TournamentStats {
     private static final int ASCENDING = 1;
     private static final int DESCENDING = 2;
 
-    public List<Player> getPlayers() {
-        return players;
-    }
-
     void run(Scanner scanner) {
         loadAndSavePlayers(scanner);
-        sortPlayers(scanner);
+        Comparator<Player> comparator = chooseComperator(scanner);
+        players.sort(comparator);
         FileWriter fileWriter = new FileWriter();
-        fileWriter.saveToFileStats(this);
+        fileWriter.saveToFileStats(players);
     }
 
-    private void sortPlayers(Scanner scanner) {
-        System.out.println("Po jakim parametrze posortować? (1 - imię, 2 - nazwisko, 3 - wynik");
-        int whichComparator = scanner.nextInt();
-        scanner.nextLine();
+    private Comparator<Player> chooseComperator(Scanner scanner) {
+        boolean exit = false;
+        Comparator<Player> comparator = null;
+        while (!exit) {
+            System.out.println("Po jakim parametrze posortować? (1 - imię, 2 - nazwisko, 3 - wynik");
+            int whichComparator = scanner.nextInt();
+            scanner.nextLine();
+            comparator = switch (whichComparator) {
+                case FIRSTNAME_COMPARE_OPTION -> new FirstNameComparator();
+                case LASTNAME_COMPARE_OPTION -> new LastNameComparator();
+                case RESULT_COMPARE_OPTION -> new ResultComparator();
+                default -> null;
+            };
+            if (comparator == null) {
+                System.out.println("Niepoprawny wybór, spróbuj jeszcze raz");
+            } else {
+                exit = true;
+            }
+        }
         System.out.println("Sortować rosnąco czy malejąco? (1 - rosnąco, 2 - malejąco)");
-        int ascendingOrDescending = scanner.nextInt();
-        scanner.nextLine();
-        switch (whichComparator) {
-            case FIRSTNAME_COMPARE_OPTION -> {
-                if (ascendingOrDescending == ASCENDING) {
-                    players.sort(new FirstNameComparator());
-                } else {
-                    players.sort(new FirstNameComparator().reversed());
-                }
-            }
-            case LASTNAME_COMPARE_OPTION -> {
-                if (ascendingOrDescending == ASCENDING) {
-                    players.sort(new LastNameComparator());
-                } else {
-                    players.sort(new LastNameComparator().reversed());
-                }
-            }
-            case RESULT_COMPARE_OPTION -> {
-                if (ascendingOrDescending == ASCENDING) {
-                    players.sort(new ResultComparator());
-                } else {
-                    players.sort(new ResultComparator().reversed());
-                }
-            }
-            default -> {
-                System.out.println("Nie udało się posortować");
-            }
+        int ascendindOrDescending = scanner.nextInt();
+        if (ascendindOrDescending == DESCENDING) {
+            return comparator.reversed();
+        } else {
+            return comparator;
         }
     }
 
